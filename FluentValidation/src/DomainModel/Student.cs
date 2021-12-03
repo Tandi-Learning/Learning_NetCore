@@ -8,7 +8,8 @@ namespace DomainModel
     {
         public string Email { get; }
         public string Name { get; private set; }
-        public string Address { get; private set; }
+        public string Phone { get; private set; }
+        public List<Address> Addresses { get; private set; }
 
         private readonly List<Enrollment> _enrollments = new List<Enrollment>();
         public virtual IReadOnlyList<Enrollment> Enrollments => _enrollments.ToList();
@@ -17,17 +18,18 @@ namespace DomainModel
         {
         }
 
-        public Student(string email, string name, string address)
+        public Student(string email, string name, string phone, List<Address> addresses)
             : this()
         {
             Email = email;
-            EditPersonalInfo(name, address);
+            Phone = phone;
+            EditPersonalInfo(name, addresses);
         }
 
-        public void EditPersonalInfo(string name, string address)
+        public void EditPersonalInfo(string name, List<Address> addresses)
         {
             Name = name;
-            Address = address;
+            Addresses = addresses;
         }
 
         public virtual void Enroll(Course course, Grade grade)

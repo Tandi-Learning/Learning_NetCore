@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Api.Validations;
 using DomainModel;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace Api
 {
     [Route("api/students")]
-    public class StudentController : Controller
+    public class StudentController : FluentApiControllerBase
     {
         private readonly StudentRepository _studentRepository;
         private readonly CourseRepository _courseRepository;
@@ -19,9 +21,11 @@ namespace Api
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] RegisterRequest request)
+        public IActionResult Register(StudentDto request)
         {
-            var student = new Student(request.Email, request.Name, request.Address);
+            var addresses = request.Addresses.Select(a => new Address(a.Street, a.City, a.State, a.ZipCode)).ToList();
+
+            var student = new Student(request.Email, request.Name, request.Phone, addresses);
             _studentRepository.Save(student);
 
             var response = new RegisterResponse
@@ -32,18 +36,22 @@ namespace Api
         }
 
         [HttpPut("{id}")]
-        public IActionResult EditPersonalInfo(long id, [FromBody] EditPersonalInfoRequest request)
+        public IActionResult EditPersonalInfo(long id, StudentDto request)
         {
             Student student = _studentRepository.GetById(id);
 
-            student.EditPersonalInfo(request.Name, request.Address);
+            var validator = new StudentValidator();
+            validator.Validate(request);
+
+            var addresses = request.Addresses.Select(a => new Address(a.Street, a.City, a.State, a.ZipCode)).ToList();
+            student.EditPersonalInfo(request.Name, addresses);
             _studentRepository.Save(student);
 
             return Ok();
         }
 
         [HttpPost("{id}/enrollments")]
-        public IActionResult Enroll(long id, [FromBody] EnrollRequest request)
+        public IActionResult Enroll(long id, EnrollRequest request)
         {
             Student student = _studentRepository.GetById(id);
 
@@ -68,9 +76,16 @@ namespace Api
             {
                 resonses.Add(new GetResonse
                 {
-                    Address = student.Address,
+                    Addresses = student.Addresses.Select(a => new AddressDto
+                    {
+                        Street = a.Street,
+                        City = a.City,
+                        State = a.State,
+                        ZipCode = a.ZipCode,
+                    }).ToList(),
                     Email = student.Email,
                     Name = student.Name,
+                    Phone = student.Phone,
                     Enrollments = student.Enrollments.Select(x => new CourseEnrollmentDto
                     {
                         Course = x.Course.Name,
@@ -89,7 +104,13 @@ namespace Api
 
             var resonse = new GetResonse
             {
-                Address = student.Address,
+                Addresses = student.Addresses.Select(a => new AddressDto
+                {
+                    Street = a.Street,
+                    City = a.City,   
+                    State = a.State, 
+                    ZipCode =a.ZipCode
+                }).ToList(),
                 Email = student.Email,
                 Name = student.Name,
                 Enrollments = student.Enrollments.Select(x => new CourseEnrollmentDto

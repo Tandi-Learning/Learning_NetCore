@@ -1,4 +1,5 @@
 ﻿using DomainModel;
+using System.Collections.Generic;
 
 namespace Api
 {
@@ -6,7 +7,16 @@ namespace Api
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
+        public string Phone { get; set; }
+        public List<AddressDto> Addresses { get; set; }
+    }
+
+    public class StudentDto
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public List<AddressDto> Addresses { get; set; }
     }
 
     public class RegisterResponse
@@ -17,14 +27,14 @@ namespace Api
     public class EditPersonalInfoRequest
     {
         public string Name { get; set; }
-        public string Address { get; set; }
+        public List<AddressDto> Addresses { get; set; }
     }
 
     public class EnrollRequest
     {
         public CourseEnrollmentDto[] Enrollments { get; set; }
     }
-
+    
     public class CourseEnrollmentDto
     {
         public string Course { get; set; }
@@ -35,7 +45,16 @@ namespace Api
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
+        public string Phone { get; set; }
+        public List<AddressDto> Addresses { get; set; }
         public CourseEnrollmentDto[] Enrollments { get; set; }
+    }
+
+    public class AddressDto
+    {
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
     }
 }

@@ -47,7 +47,12 @@ namespace Api
 
         private static Student Alice()
         {
-            var alice = new Student("alice@gmail.com", "Alice Alison", "1234 Main St, Arlington, VA, 22201");
+            var alice = new Student("alice@gmail.com", "Alice Alison", "202-555-1234",
+                new List<Address>
+                {
+                    new Address("1234 Main St", "Arlington", "VA", "22201")
+                }
+            );
             SetId(alice, 1);
             alice.Enroll(new Course(1, "Calculus", 5), Grade.A);
 
@@ -56,7 +61,12 @@ namespace Api
 
         private static Student Bob()
         {
-            var bob = new Student("bob@gmail.com", "Bob Bobson", "2345 Second St, Barlington, VA, 22202");
+            var bob = new Student("bob@gmail.com", "Bob Bobson", "305-555-6688",
+                new List<Address>
+                {
+                    new Address("2345 Second St", "Barlington", "VA", "22202")
+                }
+            );
             SetId(bob, 2);
             bob.Enroll(new Course(2, "History", 4), Grade.B);
             

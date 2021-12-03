@@ -1,5 +1,9 @@
+using Api.Validations;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
 
 namespace Api
 {
@@ -9,7 +13,11 @@ namespace Api
         {
             services.AddSwaggerGen();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(RegisterRequestValidator)));
+                });
 
             services.AddTransient<StudentRepository>();
             services.AddTransient<CourseRepository>();
