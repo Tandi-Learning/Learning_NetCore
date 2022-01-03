@@ -6,8 +6,8 @@ namespace DomainModel
 {
     public class Student : Entity
     {
-        public string Email { get; }
-        public string Name { get; private set; }
+        public Email Email { get; }
+        public StudentName Name { get; private set; }
         public string Phone { get; private set; }
         public List<Address> Addresses { get; private set; }
 
@@ -18,7 +18,7 @@ namespace DomainModel
         {
         }
 
-        public Student(string email, string name, string phone, List<Address> addresses)
+        public Student(Email email, StudentName name, string phone, List<Address> addresses)
             : this()
         {
             Email = email;
@@ -26,7 +26,7 @@ namespace DomainModel
             EditPersonalInfo(name, addresses);
         }
 
-        public void EditPersonalInfo(string name, List<Address> addresses)
+        public void EditPersonalInfo(StudentName name, List<Address> addresses)
         {
             Name = name;
             Addresses = addresses;

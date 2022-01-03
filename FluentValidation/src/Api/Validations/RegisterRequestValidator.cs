@@ -75,10 +75,15 @@ namespace Api.Validations
                     
             });
 
+            //RuleFor(x => x.Email)
+            //    .NotEmpty()
+            //    .Length(0, 150)
+            //    .EmailAddress()
+            //    .When(x => x.Email is not null);
+
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .Length(0, 150)
-                .EmailAddress()
+                .MustBeValueObject(x => Email.Create(x))
                 .When(x => x.Email is not null);
 
             RuleFor(x => x.Phone)
@@ -165,6 +170,22 @@ namespace Api.Validations
                 }
             });
         }
+
+        public static IRuleBuilderOptions<T, string> MustBeValueObject<T, TValueObject>(
+            this IRuleBuilder<T, string> ruleBuilder,
+            Func<string, Result<TValueObject, Error>> factoryMethod)
+            where TValueObject : ValueObject
+        {
+            return (IRuleBuilderOptions<T, string>)ruleBuilder.Custom((value, context) =>
+            {
+                Result<TValueObject, Error> result = factoryMethod(value);
+
+                if (result.IsFailure)
+                {
+                    context.AddFailure(result.Error.Serialize());
+                }
+            });
+        }
         //    public static IRuleBuilderOptions<T, TProperty> NotEmpty<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder)
         //    {
         //        return DefaultValidatorExtensions.NotEmpty(ruleBuilder)
@@ -183,22 +204,6 @@ namespace Api.Validations
         //        where TValueObject : DomainModel.Entity
         //    {
         //        return (IRuleBuilderOptions<T, TElement>)ruleBuilder.Custom((value, context) =>
-        //        {
-        //            Result<TValueObject, Error> result = factoryMethod(value);
-
-        //            if (result.IsFailure)
-        //            {
-        //                context.AddFailure(result.Error.Serialize());
-        //            }
-        //        });
-        //    }
-
-        //    public static IRuleBuilderOptions<T, string> MustBeValueObject<T, TValueObject>(
-        //        this IRuleBuilder<T, string> ruleBuilder,
-        //        Func<string, Result<TValueObject, Error>> factoryMethod)
-        //        where TValueObject : ValueObject
-        //    {
-        //        return (IRuleBuilderOptions<T, string>)ruleBuilder.Custom((value, context) =>
         //        {
         //            Result<TValueObject, Error> result = factoryMethod(value);
 
