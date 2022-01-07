@@ -21,6 +21,7 @@ namespace GloboTicket.TicketManagement.Api.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet("all", Name = "GetAllCategories")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<CategoryListVm>>> GetAllCategories()
@@ -29,6 +30,7 @@ namespace GloboTicket.TicketManagement.Api.Controllers
             return Ok(dtos);
         }
 
+        [Authorize]
         [HttpGet("allwithevents", Name = "GetCategoriesWithEvents")]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,6 +42,7 @@ namespace GloboTicket.TicketManagement.Api.Controllers
             return Ok(dtos);
         }
 
+        [Authorize]
         [HttpPost(Name = "AddCategory")]
         public async Task<ActionResult<CreateCategoryCommandResponse>> Create([FromBody] CreateCategoryCommand createCategoryCommand)
         {

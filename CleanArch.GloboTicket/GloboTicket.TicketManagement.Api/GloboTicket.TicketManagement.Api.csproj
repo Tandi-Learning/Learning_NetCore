@@ -22,12 +22,13 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\GloboTicket.TicketManagement.Application\GloboTicket.TicketManagement.Application.csproj" />
+		<ProjectReference Include="..\GloboTicket.TicketManagement.Identity\GloboTicket.TicketManagement.Identity.csproj" />
 		<ProjectReference Include="..\GloboTicket.TicketManagement.Infrastructure\GloboTicket.TicketManagement.Infrastructure.csproj" />
 		<ProjectReference Include="..\GloboTicket.TicketManagement.Persistence\GloboTicket.TicketManagement.Persistence.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Services\" />
+	  <Folder Include="Logs\" />
 	</ItemGroup>
 
 
