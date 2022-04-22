@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>dotnet-MeterReaderClient-76D7CD2E-2534-4423-81C9-2927B22C77E6</UserSecretsId>
   </PropertyGroup>
 

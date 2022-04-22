@@ -16,7 +16,7 @@ namespace MeterReaderClient
         //    _logger = logger;
         //}
 
-        public Task<ReadingMessage> Generate(int customerId)
+        public Task<ReadingMessage> GenerateAsync(int customerId)
         {
             var reading = new ReadingMessage
             {

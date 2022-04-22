@@ -64,7 +64,7 @@ namespace MeterReaderClient
 
                 for(int x = 0; x < 5; ++x)
                 {
-                    packet.Readings.Add(await _readingFactory.Generate(customerId));
+                    packet.Readings.Add(await _readingFactory.GenerateAsync(customerId));
                 }
 
                 try
