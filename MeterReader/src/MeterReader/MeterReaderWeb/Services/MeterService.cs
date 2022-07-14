@@ -9,11 +9,11 @@ namespace MeterReaderWeb.Services
 {
     public class MeterService :  MeterReadingService.MeterReadingServiceBase
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<MeterService> _logger;
         private readonly IReadingRepository _repository;
 
         public MeterService(
-            ILogger logger,
+            ILogger<MeterService> logger,
             IReadingRepository repository)
         {
             _logger = logger;
@@ -22,39 +22,71 @@ namespace MeterReaderWeb.Services
 
         public override async Task<StatusMessage> AddReading(ReadingPacket request, ServerCallContext context)
         {
-            var result = new StatusMessage {
-                Success = ReadingStatus.Success
-            };
-
             if (request.Successful == ReadingStatus.Success)
             {
-                try
+                foreach (var reading in request.Readings)
                 {
-                    foreach(var reading in request.Readings)
+                    var readingValue = new MeterReading()
                     {
-                        var data = new MeterReading
-                        {
-                            Value = reading.ReadingValue,
-                            ReadingDate = reading.ReadingTime.ToDateTime(),
-                            CustomerId = reading.CustomerId
-                        };
+                        CustomerId = reading.CustomerId,
+                        Value = reading.ReadingValue,
+                        ReadingDate = reading.ReadingTime.ToDateTime()
+                    };
 
-                        _repository.AddEntity(data);
-                    }
-
-                    if (await _repository.SaveAllAsync())
-                    {
-                        result.Success = ReadingStatus.Success;
-                    }
+                    _logger.LogInformation($"Adding {reading.ReadingValue}");
+                    _repository.AddEntity(readingValue);
                 }
-                catch (Exception ex)
+
+                if (await _repository.SaveAllAsync())
                 {
-                    result.Message = "Exception being thrown during process";
-                    _logger.LogError($"Exception thrown during saving of readings: {ex}");
+                    _logger.LogInformation("Successfully Saved new Readings...");
+                    return new StatusMessage()
+                    {
+                        Message = "Successfully added to the database.",
+                        Status = ReadingStatus.Success
+                    };
                 }
             }
 
-            return result;
+            _logger.LogError("Failed to Saved new Readings...");
+            return new StatusMessage()
+            {
+                Message = "Failed to store readings in Database",
+                Status = ReadingStatus.Success
+            };
+            //var result = new StatusMessage {
+            //    Success = ReadingStatus.Success
+            //};
+
+            //if (request.Successful == ReadingStatus.Success)
+            //{
+            //    try
+            //    {
+            //        foreach(var reading in request.Readings)
+            //        {
+            //            var data = new MeterReading
+            //            {
+            //                Value = reading.ReadingValue,
+            //                ReadingDate = reading.ReadingTime.ToDateTime(),
+            //                CustomerId = reading.CustomerId
+            //            };
+
+            //            _repository.AddEntity(data);
+            //        }
+
+            //        if (await _repository.SaveAllAsync())
+            //        {
+            //            result.Success = ReadingStatus.Success;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        result.Message = "Exception being thrown during process";
+            //        _logger.LogError($"Exception thrown during saving of readings: {ex}");
+            //    }
+            //}
+
+            //return result;
         }
     }
 }

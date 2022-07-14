@@ -48,6 +48,8 @@ namespace MeterReaderWeb
       services.AddScoped<IReadingRepository, ReadingRepository>();
 
       services.AddGrpc();
+
+      services.AddCors();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,9 +73,13 @@ namespace MeterReaderWeb
       app.UseAuthentication();
       app.UseAuthorization();
 
+      app.UseCors();
+      app.UseGrpcWeb();
       app.UseEndpoints(endpoints =>
       {
-        endpoints.MapGrpcService<MeterService>();
+        endpoints.MapGrpcService<MeterService>()
+          .EnableGrpcWeb()
+          .RequireCors("AllowAll");
         endpoints.MapControllerRoute(
                   name: "default",
                   pattern: "{controller=Home}/{action=Index}/{id?}");

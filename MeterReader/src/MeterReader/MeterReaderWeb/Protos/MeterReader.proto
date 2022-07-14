@@ -29,5 +29,5 @@ message ReadingMessage
 message StatusMessage
 {
     string message = 1;
-    ReadingStatus success = 2;
+    ReadingStatus status = 2;
 }
