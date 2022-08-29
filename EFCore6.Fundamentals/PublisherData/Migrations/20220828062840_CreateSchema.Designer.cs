@@ -12,8 +12,8 @@ using PublisherData;
 namespace PublisherData.Migrations
 {
     [DbContext(typeof(PubContext))]
-    [Migration("20220827170838_SeedAuthors")]
-    partial class SeedAuthors
+    [Migration("20220828062840_CreateSchema")]
+    partial class CreateSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,26 +43,6 @@ namespace PublisherData.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FirstName = "Stephen",
-                            LastName = "King"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FirstName = "Agatha",
-                            LastName = "Christie"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FirstName = "Arthur",
-                            LastName = "Clarke"
-                        });
                 });
 
             modelBuilder.Entity("PublisherDomain.Book", b =>
@@ -73,7 +53,7 @@ namespace PublisherData.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"), 1L, 1);
 
-                    b.Property<int>("AuthorId")
+                    b.Property<int>("AuthorFK")
                         .HasColumnType("int");
 
                     b.Property<decimal>("BasePrice")
@@ -88,7 +68,7 @@ namespace PublisherData.Migrations
 
                     b.HasKey("BookId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AuthorFK");
 
                     b.ToTable("Books");
                 });
@@ -97,7 +77,7 @@ namespace PublisherData.Migrations
                 {
                     b.HasOne("PublisherDomain.Author", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("AuthorFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

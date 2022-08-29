@@ -3,4 +3,4 @@
 using PublisherData;
 
 PubContext context = new PubContext();
-context.Database.EnsureCreated();
+//context.Database.EnsureCreated();

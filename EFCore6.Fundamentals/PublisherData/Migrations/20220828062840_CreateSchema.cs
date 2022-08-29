@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PublisherData.Migrations
 {
-    public partial class Initial : Migration
+    public partial class CreateSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,23 +32,23 @@ namespace PublisherData.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BasePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false)
+                    AuthorFK = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_Books_Authors_AuthorFK",
+                        column: x => x.AuthorFK,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
+                name: "IX_Books_AuthorFK",
                 table: "Books",
-                column: "AuthorId");
+                column: "AuthorFK");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
