@@ -12,8 +12,8 @@ using PublisherData;
 namespace PublisherData.Migrations
 {
     [DbContext(typeof(PubContext))]
-    [Migration("20220829211351_CreateArtistAndCover")]
-    partial class CreateArtistAndCover
+    [Migration("20220830055011_SeedData")]
+    partial class SeedData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,26 @@ namespace PublisherData.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Artists");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Pablo",
+                            LastName = "Picasco"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Beaux",
+                            LastName = "Arts"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Tom",
+                            LastName = "Bonson"
+                        });
                 });
 
             modelBuilder.Entity("PublisherDomain.Author", b =>
@@ -140,6 +160,22 @@ namespace PublisherData.Migrations
                         new
                         {
                             BookId = 2,
+                            AuthorFK = 1,
+                            BasePrice = 0m,
+                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "The Shinning"
+                        },
+                        new
+                        {
+                            BookId = 3,
+                            AuthorFK = 1,
+                            BasePrice = 0m,
+                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Salem's Lot"
+                        },
+                        new
+                        {
+                            BookId = 4,
                             AuthorFK = 2,
                             BasePrice = 0m,
                             PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -147,11 +183,43 @@ namespace PublisherData.Migrations
                         },
                         new
                         {
-                            BookId = 3,
+                            BookId = 5,
+                            AuthorFK = 2,
+                            BasePrice = 0m,
+                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Murder on the Orient Express "
+                        },
+                        new
+                        {
+                            BookId = 6,
+                            AuthorFK = 2,
+                            BasePrice = 0m,
+                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Death On The Nile"
+                        },
+                        new
+                        {
+                            BookId = 7,
+                            AuthorFK = 2,
+                            BasePrice = 0m,
+                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "The ABC Murders"
+                        },
+                        new
+                        {
+                            BookId = 8,
                             AuthorFK = 3,
                             BasePrice = 0m,
                             PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Space Odyssey 2001"
+                            Title = "2001: A Space Odyssey"
+                        },
+                        new
+                        {
+                            BookId = 9,
+                            AuthorFK = 3,
+                            BasePrice = 0m,
+                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "2010: Odyssey Two"
                         });
                 });
 
@@ -173,6 +241,44 @@ namespace PublisherData.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Covers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DesignIdeas = "The Song of the Dead",
+                            DigitalOnly = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DesignIdeas = "Vallauris Exhibition",
+                            DigitalOnly = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DesignIdeas = "Diary Of An Anorexic",
+                            DigitalOnly = false
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DesignIdeas = "Stranger Is The Night",
+                            DigitalOnly = false
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DesignIdeas = "The Phantom Fossil",
+                            DigitalOnly = false
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DesignIdeas = "Welcome To The Jungle",
+                            DigitalOnly = false
+                        });
                 });
 
             modelBuilder.Entity("ArtistCover", b =>

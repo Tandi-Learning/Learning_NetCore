@@ -12,7 +12,7 @@ using PublisherData;
 namespace PublisherData.Migrations
 {
     [DbContext(typeof(PubContext))]
-    [Migration("20220828062840_CreateSchema")]
+    [Migration("20220830053621_CreateSchema")]
     partial class CreateSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,42 @@ namespace PublisherData.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("ArtistCover", b =>
+                {
+                    b.Property<int>("ArtistsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoversId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArtistsId", "CoversId");
+
+                    b.HasIndex("CoversId");
+
+                    b.ToTable("ArtistCover");
+                });
+
+            modelBuilder.Entity("PublisherDomain.Artist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Artists");
+                });
 
             modelBuilder.Entity("PublisherDomain.Author", b =>
                 {
@@ -71,6 +107,41 @@ namespace PublisherData.Migrations
                     b.HasIndex("AuthorFK");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("PublisherDomain.Cover", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DesignIdeas")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("DigitalOnly")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Covers");
+                });
+
+            modelBuilder.Entity("ArtistCover", b =>
+                {
+                    b.HasOne("PublisherDomain.Artist", null)
+                        .WithMany()
+                        .HasForeignKey("ArtistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PublisherDomain.Cover", null)
+                        .WithMany()
+                        .HasForeignKey("CoversId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PublisherDomain.Book", b =>
