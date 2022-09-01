@@ -23,46 +23,74 @@ namespace PublisherData
                 .WithOne(b => b.Author)
                 .HasForeignKey(c => c.AuthorFK);
 
-            List<Author> authors = new List<Author>
-            {
-                new Author {Id = 1, FirstName = "Stephen", LastName = "King"},
-                new Author {Id = 2, FirstName = "Agatha", LastName = "Christie"},
-                new Author {Id = 3, FirstName = "Arthur", LastName = "Clarke"},
-            };
-            modelBuilder.Entity<Author>().HasData(authors);
+            modelBuilder.Entity<Author>().HasData(
+                new Author { Id = 1, FirstName = "Rhoda", LastName = "Lerman" });
+            var authorList = new Author[]{
+                new Author { Id = 2, FirstName = "Ruth", LastName = "Ozeki" },
+                new Author { Id = 3, FirstName = "Sofia", LastName = "Segovia" },
+                new Author { Id = 4, FirstName = "Ursula K.", LastName = "LeGuin" },
+                new Author { Id = 5, FirstName = "Hugh", LastName = "Howey" },
+                new Author { Id = 6, FirstName = "Isabelle", LastName = "Allende" }
+            };               
+            modelBuilder.Entity<Author>().HasData(authorList);
 
-            List<Book> books = new List<Book>
-            {
-                new Book { BookId = 1, AuthorFK = 1, Title = "Pet's Semetary"},
-                new Book { BookId = 2, AuthorFK = 1, Title = "The Shinning"},
-                new Book { BookId = 3, AuthorFK = 1, Title = "Salem's Lot"},
-                new Book { BookId = 4, AuthorFK = 2, Title = "Evil Under The Sun"},
-                new Book { BookId = 5, AuthorFK = 2, Title = "Murder on the Orient Express "},
-                new Book { BookId = 6, AuthorFK = 2, Title = "Death On The Nile"},
-                new Book { BookId = 7, AuthorFK = 2, Title = "The ABC Murders"},
-                new Book { BookId = 8, AuthorFK = 3, Title = "2001: A Space Odyssey"},
-                new Book { BookId = 9, AuthorFK = 3, Title = "2010: Odyssey Two"}
-            };
-            modelBuilder.Entity<Book>().HasData(books);
+            var someBooks = new Book[]{
+                new Book {BookId = 1, AuthorFK=1, Title = "In God's Ear",
+                    PublishDate= new DateTime(1989,3,1) },
+                new Book {BookId = 2, AuthorFK=2, Title = "A Tale For the Time Being",
+                PublishDate = new DateTime(2013,12,31) },
+                new Book {BookId = 3, AuthorFK=3, Title = "The Left Hand of Darkness",
+                PublishDate=(DateTime)new DateTime(1969,3,1)} };
+            modelBuilder.Entity<Book>().HasData(someBooks);
 
-            List<Artist> artists = new List<Artist>
-            {
-                new Artist {Id = 1, FirstName = "Pablo", LastName = "Picasco"},
-                new Artist {Id = 2, FirstName = "Beaux", LastName = "Arts"},
-                new Artist {Id = 3, FirstName = "Tom", LastName = "Bonson"},
-            };
-            modelBuilder.Entity<Artist>().HasData(artists);
+            var someArtists = new Artist[]{
+                new Artist { Id = 1, FirstName = "Pablo", LastName="Picasso"},
+                new Artist { Id = 2, FirstName = "Dee", LastName="Bell"},
+                new Artist { Id = 3, FirstName ="Katharine", LastName="Kuharic"} };
+            modelBuilder.Entity<Artist>().HasData(someArtists);
 
-            List<Cover> covers = new List<Cover>
-            {
-                new Cover {Id = 1, DesignIdeas = "The Song of the Dead", DigitalOnly = false},
-                new Cover {Id = 2, DesignIdeas = "Vallauris Exhibition", DigitalOnly = false},
-                new Cover {Id = 3, DesignIdeas = "Diary Of An Anorexic", DigitalOnly= false},
-                new Cover {Id = 4, DesignIdeas = "Stranger Is The Night", DigitalOnly= false},
-                new Cover {Id = 5, DesignIdeas = "The Phantom Fossil", DigitalOnly= false},
-                new Cover {Id = 6, DesignIdeas = "Welcome To The Jungle", DigitalOnly= false},
-            };
-            modelBuilder.Entity<Cover>().HasData(covers);
+            var someCovers = new Cover[]{
+                new Cover { Id = 1, DesignIdeas="How about a left hand in the dark?", DigitalOnly=false, BookId=3},
+                new Cover { Id = 2, DesignIdeas= "Should we put a clock?", DigitalOnly=true, BookId=2},
+                new Cover { Id = 3, DesignIdeas="A big ear in the clouds?", DigitalOnly = false, BookId=1}};
+            modelBuilder.Entity<Cover>().HasData(someCovers);
+
+            //example of mapping skip navigation with payload
+            //modelBuilder.Entity<Artist>()
+            //    .HasMany(a => a.Covers)
+            //    .WithMany(c => c.Artists)
+            //    .UsingEntity<CoverAssignment>(
+            //       join => join
+            //        .HasOne<Cover>()
+            //        .WithMany()
+            //        .HasForeignKey(ca => ca.CoverId),
+            //       join => join
+            //        .HasOne<Artist>()
+            //        .WithMany()
+            //        .HasForeignKey(ca => ca.ArtistId));
+            //modelBuilder.Entity<CoverAssignment>()
+            //            .Property(ca => ca.DateCreated).HasDefaultValueSql("GetDate()");
+            //modelBuilder.Entity<CoverAssignment>()
+            //             .Property(ca => ca.CoverId).HasColumnName("CoversCoverId");
+            //modelBuilder.Entity<CoverAssignment>()
+            //             .Property(ca => ca.ArtistId).HasColumnName("ArtistsArtistId");
+
+
+            //example of mapping an unconventional FK
+            //since I have the author prop in books, I am
+            //using it in WithOne:
+            //modelBuilder.Entity<Author>()
+            //   .HasMany(a => a.Books)
+            //   .WithOne(b => b.Author)
+            //   .HasForeignKey(b=>b.AuthorId).IsRequired(false);
+
+
+            //example of a more advanced mapping to specify
+            //a one to many between author and book when 
+            //there are no navigation properties:
+            //modelBuilder.Entity<Author>()
+            //    .HasMany<Book>()
+            //    .WithOne();
 
         }
     }

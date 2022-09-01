@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PublisherData.Migrations
 {
-    public partial class CreateSchema : Migration
+    public partial class InitialSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -38,20 +38,6 @@ namespace PublisherData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Covers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DesignIdeas = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DigitalOnly = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Covers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -70,6 +56,27 @@ namespace PublisherData.Migrations
                         column: x => x.AuthorFK,
                         principalTable: "Authors",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Covers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DesignIdeas = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DigitalOnly = table.Column<bool>(type: "bit", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Covers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Covers_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -97,6 +104,59 @@ namespace PublisherData.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Artists",
+                columns: new[] { "Id", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { 1, "Pablo", "Picasso" },
+                    { 2, "Dee", "Bell" },
+                    { 3, "Katharine", "Kuharic" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Authors",
+                columns: new[] { "Id", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { 1, "Rhoda", "Lerman" },
+                    { 2, "Ruth", "Ozeki" },
+                    { 3, "Sofia", "Segovia" },
+                    { 4, "Ursula K.", "LeGuin" },
+                    { 5, "Hugh", "Howey" },
+                    { 6, "Isabelle", "Allende" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "BookId", "AuthorFK", "BasePrice", "PublishDate", "Title" },
+                values: new object[] { 1, 1, 0m, new DateTime(1989, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "In God's Ear" });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "BookId", "AuthorFK", "BasePrice", "PublishDate", "Title" },
+                values: new object[] { 2, 2, 0m, new DateTime(2013, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "A Tale For the Time Being" });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "BookId", "AuthorFK", "BasePrice", "PublishDate", "Title" },
+                values: new object[] { 3, 3, 0m, new DateTime(1969, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Left Hand of Darkness" });
+
+            migrationBuilder.InsertData(
+                table: "Covers",
+                columns: new[] { "Id", "BookId", "DesignIdeas", "DigitalOnly" },
+                values: new object[] { 1, 3, "How about a left hand in the dark?", false });
+
+            migrationBuilder.InsertData(
+                table: "Covers",
+                columns: new[] { "Id", "BookId", "DesignIdeas", "DigitalOnly" },
+                values: new object[] { 2, 2, "Should we put a clock?", true });
+
+            migrationBuilder.InsertData(
+                table: "Covers",
+                columns: new[] { "Id", "BookId", "DesignIdeas", "DigitalOnly" },
+                values: new object[] { 3, 1, "A big ear in the clouds?", false });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ArtistCover_CoversId",
                 table: "ArtistCover",
@@ -106,6 +166,12 @@ namespace PublisherData.Migrations
                 name: "IX_Books_AuthorFK",
                 table: "Books",
                 column: "AuthorFK");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Covers_BookId",
+                table: "Covers",
+                column: "BookId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -114,13 +180,13 @@ namespace PublisherData.Migrations
                 name: "ArtistCover");
 
             migrationBuilder.DropTable(
-                name: "Books");
-
-            migrationBuilder.DropTable(
                 name: "Artists");
 
             migrationBuilder.DropTable(
                 name: "Covers");
+
+            migrationBuilder.DropTable(
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Authors");

@@ -62,19 +62,19 @@ namespace PublisherData.Migrations
                         {
                             Id = 1,
                             FirstName = "Pablo",
-                            LastName = "Picasco"
+                            LastName = "Picasso"
                         },
                         new
                         {
                             Id = 2,
-                            FirstName = "Beaux",
-                            LastName = "Arts"
+                            FirstName = "Dee",
+                            LastName = "Bell"
                         },
                         new
                         {
                             Id = 3,
-                            FirstName = "Tom",
-                            LastName = "Bonson"
+                            FirstName = "Katharine",
+                            LastName = "Kuharic"
                         });
                 });
 
@@ -102,20 +102,38 @@ namespace PublisherData.Migrations
                         new
                         {
                             Id = 1,
-                            FirstName = "Stephen",
-                            LastName = "King"
+                            FirstName = "Rhoda",
+                            LastName = "Lerman"
                         },
                         new
                         {
                             Id = 2,
-                            FirstName = "Agatha",
-                            LastName = "Christie"
+                            FirstName = "Ruth",
+                            LastName = "Ozeki"
                         },
                         new
                         {
                             Id = 3,
-                            FirstName = "Arthur",
-                            LastName = "Clarke"
+                            FirstName = "Sofia",
+                            LastName = "Segovia"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Ursula K.",
+                            LastName = "LeGuin"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Hugh",
+                            LastName = "Howey"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FirstName = "Isabelle",
+                            LastName = "Allende"
                         });
                 });
 
@@ -152,72 +170,24 @@ namespace PublisherData.Migrations
                             BookId = 1,
                             AuthorFK = 1,
                             BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Pet's Semetary"
+                            PublishDate = new DateTime(1989, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "In God's Ear"
                         },
                         new
                         {
                             BookId = 2,
-                            AuthorFK = 1,
+                            AuthorFK = 2,
                             BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "The Shinning"
+                            PublishDate = new DateTime(2013, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "A Tale For the Time Being"
                         },
                         new
                         {
                             BookId = 3,
-                            AuthorFK = 1,
-                            BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Salem's Lot"
-                        },
-                        new
-                        {
-                            BookId = 4,
-                            AuthorFK = 2,
-                            BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Evil Under The Sun"
-                        },
-                        new
-                        {
-                            BookId = 5,
-                            AuthorFK = 2,
-                            BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Murder on the Orient Express "
-                        },
-                        new
-                        {
-                            BookId = 6,
-                            AuthorFK = 2,
-                            BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Death On The Nile"
-                        },
-                        new
-                        {
-                            BookId = 7,
-                            AuthorFK = 2,
-                            BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "The ABC Murders"
-                        },
-                        new
-                        {
-                            BookId = 8,
                             AuthorFK = 3,
                             BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "2001: A Space Odyssey"
-                        },
-                        new
-                        {
-                            BookId = 9,
-                            AuthorFK = 3,
-                            BasePrice = 0m,
-                            PublishDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "2010: Odyssey Two"
+                            PublishDate = new DateTime(1969, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "The Left Hand of Darkness"
                         });
                 });
 
@@ -229,6 +199,9 @@ namespace PublisherData.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
                     b.Property<string>("DesignIdeas")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -238,43 +211,31 @@ namespace PublisherData.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookId")
+                        .IsUnique();
+
                     b.ToTable("Covers");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            DesignIdeas = "The Song of the Dead",
+                            BookId = 3,
+                            DesignIdeas = "How about a left hand in the dark?",
                             DigitalOnly = false
                         },
                         new
                         {
                             Id = 2,
-                            DesignIdeas = "Vallauris Exhibition",
-                            DigitalOnly = false
+                            BookId = 2,
+                            DesignIdeas = "Should we put a clock?",
+                            DigitalOnly = true
                         },
                         new
                         {
                             Id = 3,
-                            DesignIdeas = "Diary Of An Anorexic",
-                            DigitalOnly = false
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DesignIdeas = "Stranger Is The Night",
-                            DigitalOnly = false
-                        },
-                        new
-                        {
-                            Id = 5,
-                            DesignIdeas = "The Phantom Fossil",
-                            DigitalOnly = false
-                        },
-                        new
-                        {
-                            Id = 6,
-                            DesignIdeas = "Welcome To The Jungle",
+                            BookId = 1,
+                            DesignIdeas = "A big ear in the clouds?",
                             DigitalOnly = false
                         });
                 });
@@ -305,9 +266,26 @@ namespace PublisherData.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("PublisherDomain.Cover", b =>
+                {
+                    b.HasOne("PublisherDomain.Book", "Book")
+                        .WithOne("Cover")
+                        .HasForeignKey("PublisherDomain.Cover", "BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("PublisherDomain.Author", b =>
                 {
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("PublisherDomain.Book", b =>
+                {
+                    b.Navigation("Cover")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

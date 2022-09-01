@@ -8,5 +8,6 @@
         public decimal BasePrice { get; set; }
         public Author Author { get; set; }
         public int AuthorFK { get; set; }
+        public Cover Cover { get; set; }
     }
 }
