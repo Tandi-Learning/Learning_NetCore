@@ -9,9 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System;
 using System.Text;
+using System.Text.Json;
 
 namespace GloboTicket.TicketManagement.Identity
 {
@@ -65,14 +66,16 @@ namespace GloboTicket.TicketManagement.Identity
                             context.HandleResponse();
                             context.Response.StatusCode = 401;
                             context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject("401 Not authorized");
+                            //var result = JsonConvert.SerializeObject("401 Not authorized");
+                            var result = JsonSerializer.Serialize("401 Not authorized");
                             return context.Response.WriteAsync(result);
                         },
                         OnForbidden = context =>
                         {
                             context.Response.StatusCode = 403;
                             context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject("403 Not authorized");
+                            //var result = JsonConvert.SerializeObject("403 Not authorized");
+                            var result = JsonSerializer.Serialize("403 Not authorized");
                             return context.Response.WriteAsync(result);
                         },
                     };
