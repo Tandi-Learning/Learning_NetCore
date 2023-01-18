@@ -4,6 +4,7 @@ using Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 
+namespace Authentication;
 
 public static class Handlers
 {
@@ -35,6 +36,6 @@ public static class DotNetHandlers
 		var identity = new ClaimsIdentity(claims, "cookie");
 		var user = new ClaimsPrincipal(identity);
 
-		await context.SignInAsync("cookie", user);
+		await context.SignInAsync(CONSTANTS.AUTH_SCHEME, user);
 	};
 }

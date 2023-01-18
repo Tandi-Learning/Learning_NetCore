@@ -1,9 +1,9 @@
-// namespace Authorization;
+// namespace Authentication;
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.DataProtection;
 
-namespace Authorization;
+namespace Authentication;
 
 public class AuthService
 {

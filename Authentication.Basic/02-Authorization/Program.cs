@@ -1,8 +1,7 @@
-using Authorization;
+using Authentication;
 using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -10,18 +9,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // ********************************************************
-// manual implementation
+// Manually authenticate the http context
 // ********************************************************
 // builder.Services.AddHttpContextAccessor();
 // builder.Services.AddDataProtection();
 // builder.Services.AddScoped<AuthService>();
-// ********************************************************
+
 
 // ********************************************************
-// .NET implementation
+// Use .NET authentication
 // ********************************************************
-builder.Services.AddAuthentication("cookie")
-    .AddCookie("cookie");
+builder.Services.AddAuthentication(CONSTANTS.AUTH_SCHEME)
+    .AddCookie(CONSTANTS.AUTH_SCHEME);
 
 var app = builder.Build();
 
@@ -35,7 +34,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // ********************************************************
-// manual implementation
+// Manually authenticate the http context
 // ********************************************************
 // app.Use((context, next) => {
 //     var authService = context.RequestServices.GetRequiredService<AuthService>();
@@ -44,13 +43,12 @@ app.UseHttpsRedirection();
 //     return next();
 // });
 
+// app.MapGet("/login", Handlers.Login);
+
 app.MapGet("/username", Handlers.Username);
 
-// app.MapGet("/login", Handlers.Login);
 // ********************************************************
-
-// ********************************************************
-// .NET implementation
+// Use .NET authentication
 // ********************************************************
 app.UseAuthentication();
 
