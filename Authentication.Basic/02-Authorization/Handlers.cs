@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
-using Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 
-namespace Authentication;
+namespace Authorization;
 
 public static class Handlers
 {
@@ -25,6 +26,7 @@ public static class Handlers
 		authService.SignIn();
 		return "ok";
 	};
+
 }
 
 public static class DotNetHandlers
@@ -36,6 +38,16 @@ public static class DotNetHandlers
 		var identity = new ClaimsIdentity(claims, "cookie");
 		var user = new ClaimsPrincipal(identity);
 
-		await context.SignInAsync(CONSTANTS.AUTH_SCHEME, user);
+		await context.SignInAsync(Constants.AUTH_SCHEME, user);
+	};
+
+	public static Func<HttpContext, string> Claims = (context) => {
+		IEnumerable<Claim> claims = context.User.Claims;
+		return "";
+	};
+
+	public static Func<HttpContext, IDataProtectionProvider, string> Username = (context, dataProtector) =>
+	{
+        return context.User.FindFirst("usr").Value;
 	};
 }

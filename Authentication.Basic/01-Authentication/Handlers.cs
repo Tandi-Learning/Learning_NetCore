@@ -36,6 +36,6 @@ public static class DotNetHandlers
 		var identity = new ClaimsIdentity(claims, "cookie");
 		var user = new ClaimsPrincipal(identity);
 
-		await context.SignInAsync(CONSTANTS.AUTH_SCHEME, user);
+		await context.SignInAsync(Constants.AUTH_SCHEME, user);
 	};
 }

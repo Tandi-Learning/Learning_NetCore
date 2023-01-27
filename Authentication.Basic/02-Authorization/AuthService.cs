@@ -1,9 +1,10 @@
-// namespace Authentication;
-
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 
-namespace Authentication;
+namespace Authorization;
 
 public class AuthService
 {

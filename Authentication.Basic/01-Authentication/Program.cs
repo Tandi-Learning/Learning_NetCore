@@ -19,8 +19,8 @@ builder.Services.AddSwaggerGen();
 // ********************************************************
 // Use .NET authentication
 // ********************************************************
-builder.Services.AddAuthentication(CONSTANTS.AUTH_SCHEME)
-    .AddCookie(CONSTANTS.AUTH_SCHEME);
+builder.Services.AddAuthentication(Constants.AUTH_SCHEME)
+    .AddCookie(Constants.AUTH_SCHEME);
 
 var app = builder.Build();
 
