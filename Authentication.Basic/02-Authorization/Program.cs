@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -14,6 +15,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(Constants.AUTH_SCHEME)
     .AddCookie(Constants.AUTH_SCHEME);
 
+builder.Services.AddAuthorization(builder => {
+    builder.AddPolicy("us_passport", pb => {
+        pb.RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(Constants.AUTH_SCHEME)
+        .AddRequirements()
+        .RequireClaim("passport", "us");
+    });
+    builder.AddPolicy("canada_passport", pb => {
+        pb.RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(Constants.AUTH_SCHEME)
+        .RequireClaim("passport", "can");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,12 +40,39 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/claims", DotNetHandlers.Claims);
-
-app.MapGet("/username", DotNetHandlers.Username);
-
 app.UseAuthentication();
 
-app.MapGet("/login", DotNetHandlers.Login);
+app.UseAuthorization();
+
+// app.Use((context, next) => {
+//     if (context.Request.Path.StartsWithSegments("/login"))
+//     {
+//         return next(context);
+//     }
+
+//     if (!context.User.Identity.IsAuthenticated)
+//     {
+//         context.Response.StatusCode = 401;
+//         return Task.CompletedTask;
+//     }
+
+//     if (!context.User.HasClaim(claim => claim.Type == "passport" && claim.Value == "us"))
+//     {
+//         context.Response.StatusCode = 403;
+//         return Task.CompletedTask;
+//     }
+//     return next(context);
+// });
+
+app.MapGet("/america", Handlers.America).RequireAuthorization("us_passport");
+
+app.MapGet("/canada", Handlers.Canada).RequireAuthorization("canada_passport");
+
+app.MapGet("/claims", Handlers.Claims);
+
+app.MapGet("/username", Handlers.Username);
+
+app.MapGet("/login", Handlers.Login);
 
 app.Run();
+
