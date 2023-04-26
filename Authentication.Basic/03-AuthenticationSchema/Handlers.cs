@@ -37,7 +37,8 @@ public static class Handlers
 
 	public static Func<HttpContext, IDataProtectionProvider, string> Username = (context, dataProtector) =>
 	{
-        return context.User.FindFirst("usr").Value;
+		Console.WriteLine(context.User.Identity);
+    return context.User.FindFirst("usr").Value;
 	};
 
 	public static Func<HttpContext, string> America = (context) => {

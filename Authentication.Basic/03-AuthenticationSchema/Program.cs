@@ -40,14 +40,18 @@ builder.Services.AddAuthentication(options => {
         options.SaveTokens = true;
     });
 
-builder.Services.AddAuthorization(builder => {
-    builder.AddPolicy("customer", pb => {
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("customer", pb => {
         pb.RequireAuthenticatedUser()
         .AddAuthenticationSchemes(Constants.LOCAL_AUTH_SCHEME, Constants.VISITOR_AUTH_SCHEME);
     });
-    builder.AddPolicy("user", pb => {
+    options.AddPolicy("user", pb => {
         pb.RequireAuthenticatedUser()
         .AddAuthenticationSchemes(Constants.LOCAL_AUTH_SCHEME);
+    });
+    options.AddPolicy("us_passport", pb => {
+        pb.RequireAuthenticatedUser()
+        .AddAuthenticationSchemes(Constants.VISITOR_AUTH_SCHEME);
     });
 });
 
