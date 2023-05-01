@@ -20,7 +20,12 @@ public static class Handlers
 		await context.SignInAsync(Constants.LOCAL_AUTH_SCHEME, user);
 	};
 
-	public static Action<HttpContext> LoginPatreon = async (context) =>	await context.ChallengeAsync(Constants.PATREON_AUTH_SCHEME);
+	public static Action<HttpContext> LoginPatreon = async (context) =>	await context.ChallengeAsync(
+		Constants.PATREON_AUTH,
+		new AuthenticationProperties() {
+			RedirectUri = "/"
+		}
+	);
 	
 	public static Func<HttpContext, IEnumerable<Claim>> Claims = (context) => {
 		List<Claim> claims = new();
