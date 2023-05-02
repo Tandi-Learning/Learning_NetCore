@@ -22,8 +22,8 @@ builder.Services.AddAuthentication(options => {
     .AddCookie(Constants.LOCAL_AUTH_SCHEME)
     // .AddCookie(Constants.VISITOR_AUTH_SCHEME);
     .AddScheme<CookieAuthenticationOptions, VisitorAutoHandler>(Constants.VISITOR_AUTH_SCHEME, o => {})
-    // .AddCookie(Constants.PATREON_AUTH_SCHEME)
-    .AddOAuth(Constants.PATREON_AUTH_SCHEME, options => {
+    .AddCookie(Constants.PATREON_AUTH_SCHEME)
+    .AddOAuth(Constants.PATREON_AUTH, options => {
         options.SignInScheme = Constants.PATREON_AUTH_SCHEME;
 
         // https://oauth.mocklab.io/
@@ -55,6 +55,11 @@ builder.Services.AddAuthorization(options => {
     });
 });
 
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.Secure = CookieSecurePolicy.Always;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,6 +68,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCookiePolicy();
 
 app.UseHttpsRedirection();
 
@@ -79,6 +86,8 @@ app.MapGet("/canada", Handlers.Canada).RequireAuthorization("canada_passport");
 app.MapGet("/claims", Handlers.Claims).RequireAuthorization("customer");
 
 app.MapGet("/username", Handlers.Username);
+
+app.MapGet("/cb-patreon", Handlers.Patreon);
 
 app.MapGet("/login", Handlers.Login);
 

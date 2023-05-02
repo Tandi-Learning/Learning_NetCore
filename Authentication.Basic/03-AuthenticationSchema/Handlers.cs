@@ -46,6 +46,12 @@ public static class Handlers
     return context.User.FindFirst("usr").Value;
 	};
 
+	public static Func<HttpContext, string> Patreon = (context) => 
+	{
+		Console.WriteLine("Patreon Callback");
+		return "Patreon Callback";
+	};
+
 	public static Func<HttpContext, string> America = (context) => {
 		// if (!context.User.Identity.IsAuthenticated)
 		// {
