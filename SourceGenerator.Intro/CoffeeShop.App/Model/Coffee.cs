@@ -1,17 +1,18 @@
-namespace CoffeeShop.App;
+namespace CoffeeShop.App.Model;
 
-public class Coffee
+[GenerateToString]
+public partial class Coffee
 {
-  //public CoffeeTypeEnum CoffeeType { get; set; }
-  public bool Decaf { get; set; }
+    public CoffeeTypeEnum CoffeeType { get; set; }
+    public bool Decaf { get; set; }
 }
 
 public enum CoffeeTypeEnum
 {
-  EXPRESSO,
-  AMERICANO,
-  MACCHIATO,
-  LATTE,
-  CAPPUCCINO,
-  MOCHA
+    EXPRESSO,
+    AMERICANO,
+    MACCHIATO,
+    LATTE,
+    CAPPUCCINO,
+    MOCHA
 }

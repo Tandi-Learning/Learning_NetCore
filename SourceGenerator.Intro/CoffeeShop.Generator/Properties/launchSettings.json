@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CoffeeShop.Generator": {
+        "commandName": "DebugRoslynComponent",
+        "targetProject": "..\\CoffeeShop.App\\CoffeeShop.App.csproj"
+    }
+  }
+}
