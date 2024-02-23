@@ -8,32 +8,19 @@ namespace Authentication;
 
 public static class Handlers
 {
-	public static Func<HttpContext, IDataProtectionProvider, string> Username = (context, dataProtector) =>
+	public static Func<HttpContext, string> Username = (context) =>
+	// public static Func<HttpContext, IDataProtectionProvider, string> Username = (context, dataProtector) =>
 	{
-        return context.User.FindFirst("usr").Value;
+		return context.User.FindFirst("usr")?.Value ?? "none";
 	};
 
-	public static Func<HttpContext, IDataProtectionProvider, string> Login_old = (context, dataProtector) =>
-	{
-		var protector = dataProtector.CreateProtector("auth-cookie");
-		var authCookie = context.Response.Headers["set-cookie"] = $"auth={protector.Protect("usr:tandi.sunarto")}";
-		return "ok";
-	};
-
-	public static Func<AuthService, string> Login = (authService) =>
-	{
-		authService.SignIn();
-		return "ok";
-	};
-}
-
-public static class DotNetHandlers
-{
 	public static Action<HttpContext> Login = async (context) =>
 	{
-		var claims = new List<Claim>();
-		claims.Add(new Claim("usr", "scarlet"));
-		var identity = new ClaimsIdentity(claims, "cookie");
+		var claims = new List<Claim>(){
+			new Claim("usr", "scarlet"),
+			new Claim("role", "admin"),
+		};
+		var identity = new ClaimsIdentity(claims, Constants.AUTH_SCHEME);
 		var user = new ClaimsPrincipal(identity);
 
 		await context.SignInAsync(Constants.AUTH_SCHEME, user);

@@ -11,9 +11,10 @@ public static class Handlers
 {
 	public static Action<HttpContext> Login = async (context) =>
 	{
-		var claims = new List<Claim>();
-		claims.Add(new Claim("usr", "scarlet"));
-		claims.Add(new Claim("passport", "us"));
+		var claims = new List<Claim>() {
+			new Claim("usr", "scarlet"),
+			new Claim("passport", "us")
+		};
 		var identity = new ClaimsIdentity(claims, Constants.AUTH_SCHEME);
 		var user = new ClaimsPrincipal(identity);
 

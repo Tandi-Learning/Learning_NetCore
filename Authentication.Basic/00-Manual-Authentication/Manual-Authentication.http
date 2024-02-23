@@ -1,0 +1,6 @@
+@Manual_Authentication_HostAddress = http://localhost:5115
+
+GET {{Manual_Authentication_HostAddress}}/login/
+Accept: application/json
+
+###
