@@ -30,7 +30,7 @@ app.MapGet("/username", Handlers.Username);
 // ********************************************************
 // Use .NET authentication
 // ********************************************************
-app.UseAuthentication();
+app.UseAuthentication(); // is this necessary ???
 app.MapGet("/login", Handlers.Login);
 
 app.Run();

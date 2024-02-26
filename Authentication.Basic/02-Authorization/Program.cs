@@ -25,7 +25,7 @@ builder.Services.AddAuthorization(builder => {
     builder.AddPolicy("canada_passport", pb => {
         pb.RequireAuthenticatedUser()
         .AddAuthenticationSchemes(Constants.AUTH_SCHEME)
-        .RequireClaim("passport", "can");
+        .RequireClaim("passport", "can"); 
     });
 });
 
@@ -40,9 +40,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+// app.UseAuthentication();  // do we still to call this function ??
 
-app.UseAuthorization();
+// app.UseAuthorization();  // do we still to call this function ??
 
 // app.Use((context, next) => {
 //     if (context.Request.Path.StartsWithSegments("/login"))
@@ -64,15 +64,18 @@ app.UseAuthorization();
 //     return next(context);
 // });
 
-app.MapGet("/america", Handlers.America).RequireAuthorization("us_passport");
+app.MapGet("/america", Handlers.America)
+    .RequireAuthorization("us_passport");
 
-app.MapGet("/canada", Handlers.Canada).RequireAuthorization("canada_passport");
+app.MapGet("/canada", Handlers.Canada)
+    .RequireAuthorization("canada_passport");
 
-app.MapGet("/claims", Handlers.Claims);
+app.MapGet("/claims", Handlers.Claims);    
 
 app.MapGet("/username", Handlers.Username);
 
-app.MapGet("/login", Handlers.Login);
+app.MapGet("/login", Handlers.Login)
+    .AllowAnonymous();
 
 app.Run();
 

@@ -13,7 +13,8 @@ public static class Handlers
 	{
 		var claims = new List<Claim>() {
 			new Claim("usr", "scarlet"),
-			new Claim("passport", "us")
+			new Claim("passport", "us"),
+			new Claim("email", "scarlet@hotmail.com")
 		};
 		var identity = new ClaimsIdentity(claims, Constants.AUTH_SCHEME);
 		var user = new ClaimsPrincipal(identity);
@@ -21,14 +22,18 @@ public static class Handlers
 		await context.SignInAsync(Constants.AUTH_SCHEME, user);
 	};
 
-	public static Func<HttpContext, string> Claims = (context) => {
-		IEnumerable<Claim> claims = context.User.Claims;
-		return "";
+	public static Func<HttpContext, IEnumerable<Claim>> Claims = (context) => {
+		List<Claim> claims = new();
+		foreach(var claim in context.User.Claims)
+		{
+			claims.Add(new Claim(claim.Type, claim.Value));
+		}
+		return claims;
 	};
 
 	public static Func<HttpContext, IDataProtectionProvider, string> Username = (context, dataProtector) =>
 	{
-        return context.User.FindFirst("usr").Value;
+		return context.User.FindFirst("usr")?.Value ?? "";
 	};
 
 	public static Func<HttpContext, string> America = (context) => {
@@ -43,8 +48,7 @@ public static class Handlers
 		// 	context.Response.StatusCode = 403;
 		// 	return "";
 		// }
-
-		return "United State Of America";
+		return "Hello from America, land of the free";
 	};
 
 	public static Func<HttpContext, string> Canada = (context) => {
@@ -59,7 +63,6 @@ public static class Handlers
 		// 	context.Response.StatusCode = 403;
 		// 	return "";
 		// }
-
-		return "Canada";
+		return "Hello from Canada.";
 	};
 }

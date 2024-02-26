@@ -9,7 +9,6 @@ namespace Authentication;
 public static class Handlers
 {
 	public static Func<HttpContext, string> Username = (context) =>
-	// public static Func<HttpContext, IDataProtectionProvider, string> Username = (context, dataProtector) =>
 	{
 		return context.User.FindFirst("usr")?.Value ?? "none";
 	};
