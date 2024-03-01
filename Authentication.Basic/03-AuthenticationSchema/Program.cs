@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using AuthenticationSchema;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -17,26 +18,29 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = Constants.LOCAL_AUTH_SCHEME;
     options.DefaultChallengeScheme = Constants.PATREON_AUTH_SCHEME; 
-    options.DefaultSignInScheme = Constants.PATREON_AUTH_SCHEME;
+    // options.DefaultSignInScheme = Constants.PATREON_AUTH_SCHEME;
 })
     .AddCookie(Constants.LOCAL_AUTH_SCHEME)
-    // .AddCookie(Constants.VISITOR_AUTH_SCHEME);
-    .AddScheme<CookieAuthenticationOptions, VisitorAutoHandler>(Constants.VISITOR_AUTH_SCHEME, o => {})
-    .AddCookie(Constants.PATREON_AUTH_SCHEME)
+    .AddCookie(Constants.VISITOR_AUTH_SCHEME)
+    // .AddScheme<CookieAuthenticationOptions, VisitorAutoHandler>(Constants.VISITOR_AUTH_SCHEME, o => {})
+    // .AddCookie(Constants.PATREON_AUTH_SCHEME)
     .AddOAuth(Constants.PATREON_AUTH, options => {
         options.SignInScheme = Constants.PATREON_AUTH_SCHEME;
 
         // https://oauth.mocklab.io/
-        options.ClientId = "client-id";
+        options.ClientId = "learn-auth";
         options.ClientSecret = "client-secret";
 
-        options.AuthorizationEndpoint = "https://oauth.mocklab.io/oauth/authorize";
-        options.TokenEndpoint = "https://oauth.mocklab.io/oauth/token";
-        options.UserInformationEndpoint = "https://oauth.mocklab.io/oauth/userinfo";
+        options.AuthorizationEndpoint = "https://auth-lesson.wiremockapi.cloud/oauth/authorize";
+        options.TokenEndpoint = "https://auth-lesson.wiremockapi.cloud/oauth/token";
+        options.UserInformationEndpoint = "https://auth-lesson.wiremockapi.cloud/oauth/userinfo";
+        // options.AuthorizationEndpoint = "https://oauth.mocklab.io/oauth/authorize";
+        // options.TokenEndpoint = "https://oauth.mocklab.io/oauth/token";
+        // options.UserInformationEndpoint = "https://oauth.mocklab.io/oauth/userinfo";
 
-        options.CallbackPath = "/cb-patreon";
+        options.CallbackPath = "/callback";
 
-        options.Scope.Add("profile");
+        options.Scope.Add("profile email");
         options.SaveTokens = true;
     });
 
@@ -77,7 +81,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapGet("/", ctx => Task.FromResult("Hello World")).RequireAuthorization("customer");
+app.MapGet("/", () => { return "Hello World"; }).RequireAuthorization("customer");
 
 app.MapGet("/america", Handlers.America).RequireAuthorization("us_passport");
 
@@ -87,7 +91,7 @@ app.MapGet("/claims", Handlers.Claims).RequireAuthorization("customer");
 
 app.MapGet("/username", Handlers.Username);
 
-app.MapGet("/cb-patreon", Handlers.Patreon);
+app.MapGet("/cb-patreon", Handlers.Patreon);;
 
 app.MapGet("/login", Handlers.Login);
 

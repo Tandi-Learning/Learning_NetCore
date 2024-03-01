@@ -11,9 +11,10 @@ public static class Handlers
 {
 	public static Action<HttpContext> Login = async (context) =>
 	{
-		var claims = new List<Claim>();
-		claims.Add(new Claim("usr", "scarlet.local"));
-		claims.Add(new Claim("passport", "heaven"));
+		var claims = new List<Claim>{
+			new Claim("usr", "scarlet.local"),
+			new Claim("passport", "heaven")
+		};
 		var identity = new ClaimsIdentity(claims, Constants.LOCAL_AUTH_SCHEME);
 		var user = new ClaimsPrincipal(identity);
 
@@ -48,7 +49,7 @@ public static class Handlers
 
 	public static Func<HttpContext, string> Patreon = (context) => 
 	{
-		Console.WriteLine("Patreon Callback");
+		Console.WriteLine(">>>> Patreon Callback !!!!");
 		return "Patreon Callback";
 	};
 
