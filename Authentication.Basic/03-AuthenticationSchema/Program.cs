@@ -18,16 +18,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = Constants.LOCAL_AUTH_SCHEME;
     options.DefaultChallengeScheme = Constants.PATREON_AUTH_SCHEME; 
-    // options.DefaultSignInScheme = Constants.PATREON_AUTH_SCHEME;
+    options.DefaultSignInScheme = Constants.PATREON_AUTH_SCHEME;
 })
     .AddCookie(Constants.LOCAL_AUTH_SCHEME)
     .AddCookie(Constants.VISITOR_AUTH_SCHEME)
     // .AddScheme<CookieAuthenticationOptions, VisitorAutoHandler>(Constants.VISITOR_AUTH_SCHEME, o => {})
-    // .AddCookie(Constants.PATREON_AUTH_SCHEME)
+    .AddCookie(Constants.PATREON_AUTH_SCHEME)
     .AddOAuth(Constants.PATREON_AUTH, options => {
         options.SignInScheme = Constants.PATREON_AUTH_SCHEME;
 
-        // https://oauth.mocklab.io/
+        // https://www.wiremock.io/
         options.ClientId = "learn-auth";
         options.ClientSecret = "client-secret";
 
