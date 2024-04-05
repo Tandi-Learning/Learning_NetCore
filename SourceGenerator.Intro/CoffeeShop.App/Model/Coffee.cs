@@ -1,3 +1,5 @@
+using CoffeeShop.Generator;
+
 namespace CoffeeShop.App.Model;
 
 [GenerateToString]
