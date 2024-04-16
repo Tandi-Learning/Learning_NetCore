@@ -51,13 +51,17 @@ app.MapGet("/login", async (HttpContext ctx) => {
         )
     }));
     return "SIGNING IN USER.";
-});
+})
+.WithName("Login")
+.WithOpenApi();
 
 app.MapGet("/secret", (HttpContext ctx) => {
     if (ctx.User.Identity.IsAuthenticated) 
-        return "USER HAS BEEN AUTHENTICATED";
+        return "WEB APP ONE SECRET: TRANSFORMER";
 
     return "PLEASE AUTHENTICATE FIRST";
-});
+})
+.WithName("GetSecret")
+.WithOpenApi();
 
 app.Run();

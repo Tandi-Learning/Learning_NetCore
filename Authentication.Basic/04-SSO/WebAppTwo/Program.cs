@@ -51,38 +51,17 @@ app.MapGet("/login", async (HttpContext ctx) => {
         )
     }));
     return "SIGNING IN USER.";
-});
+})
+.WithName("Login")
+.WithOpenApi();
 
 app.MapGet("/secret", (HttpContext ctx) => {
     if (ctx.User.Identity.IsAuthenticated) 
-        return "USER HAS BEEN AUTHENTICATED";
+        return "WEB APP TWO SECRET: INDIANA JONES";
 
     return "PLEASE AUTHENTICATE FIRST";
-});
-
-// var summaries = new[]
-// {
-//     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-// };
-
-// app.MapGet("/weatherforecast", () =>
-// {
-//     var forecast =  Enumerable.Range(1, 5).Select(index =>
-//         new WeatherForecast
-//         (
-//             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-//             Random.Shared.Next(-20, 55),
-//             summaries[Random.Shared.Next(summaries.Length)]
-//         ))
-//         .ToArray();
-//     return forecast;
-// })
-// .WithName("GetWeatherForecast")
-// .WithOpenApi();
+})
+.WithName("GetSecret")
+.WithOpenApi();
 
 app.Run();
-
-// record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-// {
-//     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-// }
